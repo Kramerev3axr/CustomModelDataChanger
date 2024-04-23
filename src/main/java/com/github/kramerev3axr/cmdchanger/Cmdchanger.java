@@ -25,38 +25,38 @@ public class Cmdchanger implements ModInitializer {
 	@Override
 	public void onInitialize() {
 		 CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
-			 dispatcher.register(CommandManager.literal("custommodeldata")
-					.then(CommandManager.literal("set")
-             			.then(CommandManager.argument("cmd", IntegerArgumentType.integer())
+			dispatcher.register(CommandManager.literal("custommodeldata")
+				.then(CommandManager.literal("set")
+             				.then(CommandManager.argument("cmd", IntegerArgumentType.integer())
              					.executes(ctx -> {
              						ItemStack selectedItem = ctx.getSource().getPlayer().getInventory().getMainHandStack();
              						Integer cmdNbt = IntegerArgumentType.getInteger(ctx, "cmd");
 
              						selectedItem.apply(DataComponentTypes.CUSTOM_MODEL_DATA, selectedItem.get(DataComponentTypes.CUSTOM_MODEL_DATA), cmd -> new CustomModelDataComponent(cmdNbt));
              						ctx.getSource().sendFeedback(() -> Text.literal("Set CustomModelData of ")
-             															.append(Text.literal(selectedItem.getName().getString()).withColor(CYAN))
-             															.append(Text.literal(" to "))
-             															.append(Text.literal(String.valueOf(cmdNbt)).withColor(GOLD)), false);
+             										.append(Text.literal(selectedItem.getName().getString()).withColor(CYAN))
+             										.append(Text.literal(" to "))
+             										.append(Text.literal(String.valueOf(cmdNbt)).withColor(GOLD)), false);
              						return 1;
              					})
              				)
-					)
-					.then(CommandManager.literal("get")
-							.executes(ctx -> {
-								ItemStack selectedItem = ctx.getSource().getPlayer().getInventory().getMainHandStack();
-								
-								 if (selectedItem.get(DataComponentTypes.CUSTOM_MODEL_DATA) != null) {
-									int cmdNbt = selectedItem.get(DataComponentTypes.CUSTOM_MODEL_DATA).value();
-									ctx.getSource().sendFeedback(() ->  Text.literal("")
-																		.append(Text.literal(selectedItem.getName().getString()).withColor(CYAN))
-																		.append((" has a CustomModelData of "))
-																		.append(Text.literal(String.valueOf(cmdNbt)).withColor(GOLD)), false);
-								}
-								else {
-									ctx.getSource().sendFeedback(() -> Text.literal("Error! Please make sure you have a CustomModelData set!").withColor(DARK_RED), false);
-								}
-								return 1;
-							})
+				)
+				.then(CommandManager.literal("get")
+						.executes(ctx -> {
+							ItemStack selectedItem = ctx.getSource().getPlayer().getInventory().getMainHandStack();
+							
+							if (selectedItem.get(DataComponentTypes.CUSTOM_MODEL_DATA) != null) {
+								int cmdNbt = selectedItem.get(DataComponentTypes.CUSTOM_MODEL_DATA).value();
+								ctx.getSource().sendFeedback(() ->  Text.literal("")
+												.append(Text.literal(selectedItem.getName().getString()).withColor(CYAN))
+												.append((" has a CustomModelData of "))
+												.append(Text.literal(String.valueOf(cmdNbt)).withColor(GOLD)), false);
+							}
+							else {
+								ctx.getSource().sendFeedback(() -> Text.literal("Error! Please make sure you have a CustomModelData set!").withColor(DARK_RED), false);
+							}
+							return 1;
+						})
 					)
 				);
 		 });
