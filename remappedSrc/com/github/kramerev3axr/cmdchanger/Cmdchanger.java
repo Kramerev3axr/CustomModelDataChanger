@@ -1,7 +1,5 @@
 package com.github.kramerev3axr.cmdchanger;
 
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.CustomModelDataComponent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,9 +28,9 @@ public class Cmdchanger implements ModInitializer {
              			.then(CommandManager.argument("cmd", IntegerArgumentType.integer())
              					.executes(ctx -> {
              						ItemStack selectedItem = ctx.getSource().getPlayer().getInventory().getMainHandStack();
-             						Integer cmdNbt = IntegerArgumentType.getInteger(ctx, "cmd");
-
-             						selectedItem.apply(DataComponentTypes.CUSTOM_MODEL_DATA, selectedItem.get(DataComponentTypes.CUSTOM_MODEL_DATA), cmd -> new CustomModelDataComponent(cmdNbt));
+             						int cmdNbt = IntegerArgumentType.getInteger(ctx, "cmd");
+             						
+             						selectedItem.getOrCreateNbt().putInt("CustomModelData", cmdNbt);
              						ctx.getSource().sendFeedback(() -> Text.literal("Set CustomModelData of ")
              															.append(Text.literal(selectedItem.getName().getString()).withColor(CYAN))
              															.append(Text.literal(" to "))
@@ -45,8 +43,8 @@ public class Cmdchanger implements ModInitializer {
 							.executes(ctx -> {
 								ItemStack selectedItem = ctx.getSource().getPlayer().getInventory().getMainHandStack();
 								
-								 if (selectedItem.get(DataComponentTypes.CUSTOM_MODEL_DATA) != null) {
-									int cmdNbt = selectedItem.get(DataComponentTypes.CUSTOM_MODEL_DATA).value();
+								if (selectedItem.hasNbt()) {
+									int cmdNbt = selectedItem.getNbt().getInt("CustomModelData");
 									ctx.getSource().sendFeedback(() ->  Text.literal("")
 																		.append(Text.literal(selectedItem.getName().getString()).withColor(CYAN))
 																		.append((" has a CustomModelData of "))
